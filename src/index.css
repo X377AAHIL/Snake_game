@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+
+@theme {
+  --font-vt323: "VT323", monospace;
+  --font-mono: "Share Tech Mono", monospace;
+  --font-press-start: "Press Start 2P", system-ui;
+}
+
+:root {
+  --cyan: #00FFFF;
+  --magenta: #FF00FF;
+  --base: #050505;
+  --alert: #FF0000;
+  --neutral: #101010;
+  --text: #E0E0E0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--base);
+  color: var(--text);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  cursor: crosshair;
+}
+
+/* >> REASON: Brutalist visible grid borders */
+.brutalist-grid {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.glass {
+  background: rgba(10, 10, 10, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+}
+
+/* >> REASON: Aggressive glitch displacement */
+@keyframes glitch-tear {
+  0%   { clip-path: inset(0 0 98% 0); transform: translateX(-8px) skewX(5deg); filter: hue-rotate(90deg); }
+  25%  { clip-path: inset(40% 0 50% 0); transform: translateX(8px) skewX(-5deg); filter: hue-rotate(180deg); }
+  50%  { clip-path: inset(80% 0 5% 0); transform: translateX(-4px) skewX(10deg); filter: hue-rotate(270deg); }
+  75%  { clip-path: inset(10% 0 85% 0); transform: translateX(4px) skewX(-10deg); filter: hue-rotate(360deg); }
+  100% { clip-path: inset(0 0 98% 0); transform: translateX(0); }
+}
+
+.glitch-hover:hover {
+  animation: glitch-tear 0.15s infinite;
+}
+
+/* >> REASON: Slam-in animation from Recipe 2 */
+@keyframes slamIn {
+  0% { transform: scale(3) translateY(-200px) skewX(-20deg); opacity: 0; filter: blur(20px); }
+  100% { transform: scale(1) translateY(0) skewX(0); opacity: 1; filter: blur(0); }
+}
+
+.slam-in {
+  animation: slamIn 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.49) forwards;
+}
+
+/* >> REASON: CRT scanline overlay */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,0,0,0.2) 0px,
+    rgba(0,0,0,0.2) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  z-index: 100;
+}
+
+/* >> REASON: Static noise overlay */
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 101;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* >> REASON: RGB split text shadow */
+.rgb-split {
+  text-shadow: -3px 0 var(--magenta), 3px 0 var(--cyan);
+}
+
+/* >> REASON: Terminal cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: '_';
+  animation: blink 0.8s infinite;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  opacity: 0.15;
+  transition: background-color 1.5s ease;
+}
